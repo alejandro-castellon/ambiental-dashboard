@@ -6,6 +6,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { points } from "@/lib/data";
 import { MapPoint } from "@/lib/types";
+import { OverviewChart } from "./overview-chart";
 
 const CustomMarker: React.FC<{ point: MapPoint }> = ({ point }) => {
   const customIcon = React.useMemo(
@@ -28,8 +29,7 @@ const CustomMarker: React.FC<{ point: MapPoint }> = ({ point }) => {
       <Popup>
         <div className="popup-content">
           <img src={point.image} alt={point.title} />
-          <h3>{point.title}</h3>
-          <p>{point.description}</p>
+          <OverviewChart />
           <Link
             href={`/${point.id}`}
             className="bg-cyan-900 hover:bg-cyan-700 font-bold py-2 px-4 rounded"
@@ -50,10 +50,7 @@ export const Map: React.FC = () => {
         zoom={14}
         style={{ height: "100%", width: "100%" }}
       >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {points.map((point) => (
           <CustomMarker key={point.id} point={point} />
         ))}
