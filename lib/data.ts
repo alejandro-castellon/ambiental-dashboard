@@ -1,4 +1,4 @@
-import { MapPoint } from "./types";
+import { MapPoint, Payment } from "./types";
 
 // Datos de ejemplo para los puntos en el mapa
 export const points: MapPoint[] = [
@@ -124,4 +124,20 @@ export const chartData = [
   { date: "2024-06-28", ph: 149, temp: 200, con: 100 },
   { date: "2024-06-29", ph: 103, temp: 160, con: 50 },
   { date: "2024-06-30", ph: 446, temp: 400, con: 600 },
+];
+
+export const payments: Payment[] = [
+  {
+    id: "728ed52f",
+    amount: 100,
+    status: "pending",
+    email: "m@example.com",
+  },
+  {
+    id: "489e1d42",
+    amount: 125,
+    status: "processing",
+    email: "example@gmail.com",
+  },
+  // ...
 ];

@@ -76,7 +76,7 @@ export function Chart() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-col space-y-0 border-b py-5 sm:flex-row sm:items-center">
+      <CardHeader className="flex flex-col space-y-0 border-b sm:flex-row sm:items-center">
         <div className="grid flex-1 gap-1 text-left">
           <CardTitle>Datos de los sensores</CardTitle>
           <CardDescription>
