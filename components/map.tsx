@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import Link from "next/link";
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -13,7 +12,7 @@ const CustomMarker: React.FC<{ point: MapPoint }> = ({ point }) => {
     () =>
       L.icon({
         iconUrl: point.image,
-        iconSize: [40, 40],
+        iconSize: [45, 45],
         iconAnchor: [20, 40],
         popupAnchor: [0, -40],
         className: "custom-icon",
@@ -29,13 +28,7 @@ const CustomMarker: React.FC<{ point: MapPoint }> = ({ point }) => {
       <Popup>
         <div className="popup-content">
           <img src={point.image} alt={point.title} />
-          <OverviewChart />
-          <Link
-            href={`/${point.id}`}
-            className="bg-cyan-900 hover:bg-cyan-700 font-bold py-2 px-4 rounded"
-          >
-            <span className="text-white">Ver detalles</span>
-          </Link>
+          <OverviewChart point={point} />
         </div>
       </Popup>
     </Marker>

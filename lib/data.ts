@@ -29,6 +29,7 @@ export const overviewChartData = [
   { date: "04-04-2024", ph: 73, temp: 190, con: 80 },
   { date: "05-04-2024", ph: 209, temp: 130, con: 80 },
   { date: "06-04-2024", ph: 214, temp: 140, con: 80 },
+  { date: "07-04-2024", ph: 220, temp: 145, con: 100 },
 ];
 
 export const chartData = [

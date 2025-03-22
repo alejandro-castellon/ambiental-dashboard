@@ -47,7 +47,7 @@ export function Chart() {
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("ph");
 
-  // Calculate totals for each metric
+  // Calcular totales de los datos para cada sensor
   const totals = React.useMemo(
     () => ({
       ph: chartData.reduce((acc, curr) => acc + curr.ph, 0),
@@ -57,7 +57,7 @@ export function Chart() {
     []
   );
 
-  // Filter data based on time range
+  // Filtrar datos en base al tiempo seleccionado
   const filteredData = React.useMemo(() => {
     return chartData.filter((item) => {
       const date = new Date(item.date);
@@ -93,17 +93,17 @@ export function Chart() {
             className="mt-3 w-[160px] rounded-lg sm:mt-0 sm:ml-auto"
             aria-label="Select time range"
           >
-            <SelectValue placeholder="Last 3 months" />
+            <SelectValue placeholder="Últimos 3 meses" />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
             <SelectItem value="90d" className="rounded-lg">
-              Last 3 months
+              Últimos 3 meses
             </SelectItem>
             <SelectItem value="30d" className="rounded-lg">
-              Last 30 days
+              Últimos 30 días
             </SelectItem>
             <SelectItem value="7d" className="rounded-lg">
-              Last 7 days
+              Últimos 7 días
             </SelectItem>
           </SelectContent>
         </Select>
@@ -116,10 +116,10 @@ export function Chart() {
             <button
               key={chart}
               data-active={activeChart === chart}
-              className="flex flex-1 flex-col justify-center gap-1 border-r px-6 py-4 text-center last:border-r-0 data-[active=true]:bg-muted/50 sm:min-w-[120px] sm:py-5"
+              className="flex flex-1 flex-col hover:cursor-pointer justify-center gap-1 border-r px-6 py-4 text-center last:border-r-0 data-[active=true]:bg-muted/50 sm:min-w-[120px] sm:py-5"
               onClick={() => setActiveChart(chart)}
             >
-              <span className="text-xs text-muted-foreground">
+              <span className="text-xs text-muted-foreground sm:text-2xl">
                 {chartConfig[chart].label}
               </span>
               <span className="text-lg font-bold leading-none sm:text-2xl">
@@ -168,7 +168,7 @@ export function Chart() {
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
+                return date.toLocaleDateString("es-US", {
                   month: "short",
                   day: "numeric",
                 });
@@ -185,7 +185,7 @@ export function Chart() {
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                    return new Date(value).toLocaleDateString("es-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",

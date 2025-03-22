@@ -2,7 +2,7 @@
 
 import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
-
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -14,10 +14,13 @@ import {
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { overviewChartData } from "@/lib/data";
+import { MapPoint } from "@/lib/types";
 
 const chartConfig = {
   ph: {
@@ -34,12 +37,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function OverviewChart() {
+export function OverviewChart({ point }: { point: MapPoint }) {
   return (
     <Card className="my-4">
       <CardHeader>
-        <CardTitle>Line Chart - Multiple</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Gráfico de {point.title}</CardTitle>
+        <CardDescription>01 Abril - 07 Abril 2025</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -81,6 +84,7 @@ export function OverviewChart() {
               strokeWidth={2}
               dot={false}
             />
+            <ChartLegend content={<ChartLegendContent />} />
           </LineChart>
         </ChartContainer>
       </CardContent>
@@ -88,11 +92,14 @@ export function OverviewChart() {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+              Aumento de 5.2% esta semana <TrendingUp className="h-4 w-4" />
             </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              Showing total visitors for the last 6 months
-            </div>
+            <Link
+              href={`/${point.id}`}
+              className="bg-cyan-900 hover:bg-cyan-700 font-bold py-2 px-4 rounded text-center"
+            >
+              <span className="text-white">Ver detalles</span>
+            </Link>
           </div>
         </div>
       </CardFooter>
