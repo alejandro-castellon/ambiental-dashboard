@@ -5,9 +5,23 @@ export interface MapPoint {
   image: string;
 }
 
-export interface Payment {
+export interface SensorData {
   id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
+  date: string;
+  time: string;
+  temperature: number;
+  ph: number;
+  conductivity: number;
+  oxygen: number;
+  solid: number;
+  dbo5: number;
+  nitrogen: number;
+  phosphorus: number;
+}
+
+export interface ChartData {
+  date: string;
+  ph: number;
+  temperature: number;
+  conductivity: number;
 }

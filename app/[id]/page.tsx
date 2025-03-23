@@ -3,23 +3,66 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/data-table";
-import { Payment } from "@/lib/types";
-import { payments } from "@/lib/data";
+import { SensorData, ChartData } from "@/lib/types";
+import { sensorData } from "@/lib/data";
+import { Suspense } from "react";
+import { Metadata } from "next";
 
-export default function Page({ params }: { params: { id: string } }) {
+export const metadata: Metadata = {
+  title: "Punto",
+};
+
+async function fetchSensorData(): Promise<SensorData[]> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(sensorData);
+    }, 1000);
+  });
+}
+
+async function SensorDataComponent({ id }: { id: string }) {
+  const sensorData = await fetchSensorData();
+
+  const chartData: ChartData[] = sensorData.map((data) => ({
+    date: data.date,
+    temperature: data.temperature,
+    ph: data.ph,
+    conductivity: data.conductivity,
+  }));
+
   return (
     <div className="m-4 flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-cyan-900">Punto: {params.id}</h1>
+        <h1 className="text-3xl font-bold text-cyan-900">Punto: {id}</h1>
         <Link href="/">
           <Button className="bg-red-700 hover:bg-red-500 hover:cursor-pointer">
             Salir
           </Button>
         </Link>
       </div>
-      <Chart />
+      <Chart chartData={chartData} />
       <h1 className="text-2xl font-bold text-cyan-900 mt-4">Tabla de datos</h1>
-      <DataTable columns={columns} data={payments} />
+      <DataTable columns={columns} data={sensorData} />
     </div>
+  );
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="animate-spin w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full"></div>
+        </div>
+      }
+    >
+      <SensorDataComponent id={id} />
+    </Suspense>
   );
 }

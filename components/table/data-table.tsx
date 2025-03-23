@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -65,14 +66,22 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center pb-4">
+      <div className="flex items-center pb-4 gap-2">
+        <Label
+          htmlFor="date-filter"
+          className="text-sm font-medium text-gray-700"
+        >
+          Filtrar por fecha:
+        </Label>
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          id="date-filter"
+          type="date"
+          placeholder="Filter by date..."
+          value={(table.getColumn("date")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("date")?.setFilterValue(event.target.value)
           }
-          className="w-1/2 sm:w-1/4"
+          className="w-40" // Ajustamos el ancho del input
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

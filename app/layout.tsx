@@ -13,7 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ambiental App",
+  title: {
+    template: "%s | Ambiental App",
+    default: "Ambiental App",
+  },
   description: "The app for ambiental data",
 };
 

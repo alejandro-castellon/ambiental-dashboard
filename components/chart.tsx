@@ -25,43 +25,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { chartData } from "@/lib/data";
+import { ChartData } from "@/lib/types";
 
 const chartConfig = {
   ph: {
     label: "Ph",
     color: "hsl(var(--chart-2))",
   },
-  temp: {
+  temperature: {
     label: "T°",
     color: "red",
   },
-  con: {
-    label: "Conductivity",
+  conductivity: {
+    label: "Conductividad",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig;
 
-export function Chart() {
+export function Chart({ chartData }: { chartData: ChartData[] }) {
   const [timeRange, setTimeRange] = React.useState("90d");
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("ph");
-
-  // Calcular totales de los datos para cada sensor
-  const totals = React.useMemo(
-    () => ({
-      ph: chartData.reduce((acc, curr) => acc + curr.ph, 0),
-      temp: chartData.reduce((acc, curr) => acc + curr.temp, 0),
-      con: chartData.reduce((acc, curr) => acc + curr.con, 0),
-    }),
-    []
-  );
 
   // Filtrar datos en base al tiempo seleccionado
   const filteredData = React.useMemo(() => {
     return chartData.filter((item) => {
       const date = new Date(item.date);
-      const referenceDate = new Date("2024-06-30");
+      const referenceDate = new Date();
       let daysToSubtract = 90;
       if (timeRange === "30d") {
         daysToSubtract = 30;
@@ -73,6 +63,28 @@ export function Chart() {
       return date >= startDate;
     });
   }, [timeRange]);
+
+  // Calcular el mayor valor de los datos para cada sensor
+  const maxValues = React.useMemo(() => {
+    const getMaxValue = (key: keyof ChartData) => {
+      return filteredData.reduce(
+        (max, curr) =>
+          typeof curr[key] === "number" && curr[key] > max ? curr[key] : max,
+        -Infinity
+      );
+    };
+
+    return {
+      ph: getMaxValue("ph"),
+      temperature: getMaxValue("temperature"),
+      conductivity: getMaxValue("conductivity"),
+    };
+  }, [filteredData]);
+
+  const fixTimezone = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+  };
 
   return (
     <Card>
@@ -123,7 +135,7 @@ export function Chart() {
                 {chartConfig[chart].label}
               </span>
               <span className="text-lg font-bold leading-none sm:text-2xl">
-                {totals[chart].toLocaleString()}
+                {maxValues[chart].toLocaleString()}
               </span>
             </button>
           );
@@ -167,7 +179,7 @@ export function Chart() {
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                const date = new Date(value);
+                const date = fixTimezone(value);
                 return date.toLocaleDateString("es-US", {
                   month: "short",
                   day: "numeric",
@@ -185,7 +197,8 @@ export function Chart() {
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("es-US", {
+                    const date = fixTimezone(value);
+                    return date.toLocaleDateString("es-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
