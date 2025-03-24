@@ -5,19 +5,19 @@ export const points: MapPoint[] = [
   {
     id: 1,
     position: [-17.376952, -66.142718],
-    title: "Punto 1",
+    title: "Maica",
     image: "/images/punto1.jpg",
   },
   {
     id: 2,
     position: [-17.381555, -66.160535],
-    title: "Punto 2",
+    title: "Killman",
     image: "/images/punto2.jpg",
   },
   {
     id: 3,
     position: [-17.397404, -66.167836],
-    title: "Punto 3",
+    title: "Cobija",
     image: "/images/punto3.jpg",
   },
 ];

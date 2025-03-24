@@ -12,16 +12,29 @@ export const metadata: Metadata = {
   title: "Punto",
 };
 
-async function fetchSensorData(): Promise<SensorData[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(sensorData);
-    }, 1000);
-  });
+async function fetchSensorData(punto: string): Promise<SensorData[]> {
+  try {
+    const res = await fetch(
+      `http://localhost:1880/get-data?Punto_de_Muestreo=${encodeURIComponent(
+        punto
+      )}`,
+      { cache: "no-store" }
+    );
+
+    if (!res.ok) {
+      throw new Error("Error al obtener datos desde Node-RED");
+    }
+
+    const data = await res.json();
+    return data; // Asegúrate que Node-RED devuelva un JSON en el formato correcto
+  } catch (error) {
+    console.error("Error al hacer fetch de los datos:", error);
+    return [];
+  }
 }
 
-async function SensorDataComponent({ id }: { id: string }) {
-  const sensorData = await fetchSensorData();
+async function SensorDataComponent({ point }: { point: string }) {
+  const sensorData = await fetchSensorData(point);
 
   const chartData: ChartData[] = sensorData.map((data) => ({
     date: data.date,
@@ -33,7 +46,7 @@ async function SensorDataComponent({ id }: { id: string }) {
   return (
     <div className="m-4 flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-cyan-900">Punto: {id}</h1>
+        <h1 className="text-3xl font-bold text-cyan-900">Punto: {point}</h1>
         <Link href="/">
           <Button className="bg-red-700 hover:bg-red-500 hover:cursor-pointer">
             Salir
@@ -50,9 +63,9 @@ async function SensorDataComponent({ id }: { id: string }) {
 export default async function Page({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ point: string }>;
 }) {
-  const { id } = await params;
+  const { point } = await params;
 
   return (
     <Suspense
@@ -62,7 +75,7 @@ export default async function Page({
         </div>
       }
     >
-      <SensorDataComponent id={id} />
+      <SensorDataComponent point={point} />
     </Suspense>
   );
 }

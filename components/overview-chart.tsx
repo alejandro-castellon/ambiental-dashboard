@@ -122,7 +122,7 @@ export function OverviewChart({ point }: { point: MapPoint }) {
               Datos obtenidos de la última semana.
             </div>
             <Link
-              href={`/${point.id}`}
+              href={`/${point.title.toLowerCase()}`}
               className="bg-cyan-900 hover:bg-cyan-700 font-bold py-2 px-4 rounded text-center"
             >
               <span className="text-white">Ver detalles</span>
