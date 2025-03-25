@@ -26,7 +26,7 @@ async function fetchSensorData(punto: string): Promise<SensorData[]> {
     }
 
     const data = await res.json();
-    return data; // Asegúrate que Node-RED devuelva un JSON en el formato correcto
+    return data;
   } catch (error) {
     console.error("Error al hacer fetch de los datos:", error);
     return [];
@@ -34,10 +34,11 @@ async function fetchSensorData(punto: string): Promise<SensorData[]> {
 }
 
 async function SensorDataComponent({ point }: { point: string }) {
-  const sensorData = await fetchSensorData(point);
+  //const sensorData = await fetchSensorData(point);
 
   const chartData: ChartData[] = sensorData.map((data) => ({
     date: data.date,
+    time: data.time,
     temperature: data.temperature,
     ph: data.ph,
     conductivity: data.conductivity,

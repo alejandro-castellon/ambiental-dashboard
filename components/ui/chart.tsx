@@ -11,6 +11,7 @@ const THEMES = { light: "", dark: ".dark" } as const;
 export type ChartConfig = {
   [k in string]: {
     label?: React.ReactNode;
+    unit?: string;
     icon?: React.ComponentType;
   } & (
     | { color?: string; theme?: never }
@@ -173,7 +174,7 @@ function ChartTooltipContent({
   return (
     <div
       className={cn(
-        "border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
+        "border-border/50 bg-background grid min-w-[10rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
         className
       )}
     >
@@ -234,7 +235,7 @@ function ChartTooltipContent({
                     </div>
                     {item.value && (
                       <span className="text-foreground font-mono font-medium tabular-nums">
-                        {item.value.toLocaleString()}
+                        {item.value.toLocaleString()} {itemConfig?.unit || ""}
                       </span>
                     )}
                   </div>

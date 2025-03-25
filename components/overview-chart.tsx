@@ -26,14 +26,17 @@ const chartConfig = {
   ph: {
     label: "Ph",
     color: "hsl(var(--chart-1))",
+    unit: "",
   },
   temperature: {
     label: "T°",
     color: "red",
+    unit: "°C",
   },
   conductivity: {
     label: "Con",
     color: "hsl(var(--chart-2))",
+    unit: "µS/cm",
   },
 } satisfies ChartConfig;
 
@@ -62,7 +65,14 @@ export function OverviewChart({ point }: { point: MapPoint }) {
     <Card className="my-4">
       <CardHeader>
         <CardTitle>Gráfico de {point.title}</CardTitle>
-        <CardDescription>01 Abril - 07 Abril 2025</CardDescription>
+        <CardDescription>
+          {new Date().toLocaleDateString("es-ES", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
+        </CardDescription>
       </CardHeader>
       {!loading && (
         <CardContent>
@@ -77,7 +87,7 @@ export function OverviewChart({ point }: { point: MapPoint }) {
             >
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="date"
+                dataKey={(data) => `${data.time}`}
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
