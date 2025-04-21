@@ -26,6 +26,6 @@ export interface ChartData {
   ph: number;
   temperature: number;
   conductivity: number;
-  turbidity: number;
-  tempAmb: number;
+  turbidity?: number;
+  tempAmb?: number;
 }
