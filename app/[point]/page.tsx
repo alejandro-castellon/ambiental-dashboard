@@ -3,16 +3,16 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/data-table";
-import { SensorData, ChartData } from "@/lib/types";
+import { ChartData } from "@/lib/types";
 import { sensorData } from "@/lib/data";
 import { Suspense } from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Punto",
+  title: "Punto de muestreo",
 };
 
-async function fetchSensorData(punto: string): Promise<SensorData[]> {
+/*async function fetchSensorData(punto: string): Promise<SensorData[]> {
   try {
     const res = await fetch(
       `http://localhost:1880/get-data?Punto_de_Muestreo=${encodeURIComponent(
@@ -31,23 +31,28 @@ async function fetchSensorData(punto: string): Promise<SensorData[]> {
     console.error("Error al hacer fetch de los datos:", error);
     return [];
   }
-}
+}*/
 
 async function SensorDataComponent({ point }: { point: string }) {
   //const sensorData = await fetchSensorData(point);
 
   const chartData: ChartData[] = sensorData.map((data) => ({
     date: data.date,
-    time: data.time,
     temperature: data.temperature,
     ph: data.ph,
     conductivity: data.conductivity,
+    turbidity: data.turbidity,
+    tempAmb: data.temp_amb,
   }));
 
   return (
     <div className="m-4 flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-cyan-900">Punto: {point}</h1>
+        <h1 className="text-3xl sm:text-5xl font-bold text-cyan-900">
+          {decodeURIComponent(point).replace(/\b\w/g, (char) =>
+            char.toUpperCase()
+          )}
+        </h1>
         <Link href="/">
           <Button className="bg-red-700 hover:bg-red-500 hover:cursor-pointer">
             Salir

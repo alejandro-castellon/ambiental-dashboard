@@ -8,7 +8,6 @@ export interface MapPoint {
 export interface SensorData {
   id: string;
   date: string;
-  time: string;
   temp_amb: number;
   temperature: number;
   ph: number;
@@ -22,9 +21,11 @@ export interface SensorData {
 }
 
 export interface ChartData {
-  date: string;
-  time: string;
+  date?: string;
+  time?: string;
   ph: number;
   temperature: number;
   conductivity: number;
+  turbidity: number;
+  tempAmb: number;
 }

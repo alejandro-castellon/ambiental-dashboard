@@ -40,21 +40,35 @@ const chartConfig = {
     label: "Conductividad",
     color: "hsl(var(--chart-1))",
   },
+  turbidity: {
+    label: "Turbidez",
+    color: "blue",
+  },
+  tempAmb: {
+    label: "T° Amb.",
+    color: "orange",
+  },
 } satisfies ChartConfig;
 
 export function Chart({ chartData }: { chartData: ChartData[] }) {
-  const [timeRange, setTimeRange] = React.useState("90d");
+  const [timeRange, setTimeRange] = React.useState("1d");
   const [activeChart, setActiveChart] =
     React.useState<keyof typeof chartConfig>("ph");
 
   // Filtrar datos en base al tiempo seleccionado
   const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
+    const date = new Date(item.date ?? "");
     let daysToSubtract = 90;
     if (timeRange === "30d") {
       daysToSubtract = 31;
     } else if (timeRange === "7d") {
       daysToSubtract = 8;
+    } else if (timeRange === "1d") {
+      daysToSubtract = 1;
+    } else if (timeRange === "all") {
+      return true;
+    } else if (timeRange === "365d") {
+      daysToSubtract = 365;
     }
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - daysToSubtract);
@@ -74,13 +88,10 @@ export function Chart({ chartData }: { chartData: ChartData[] }) {
       ph: getMaxValue("ph"),
       temperature: getMaxValue("temperature"),
       conductivity: getMaxValue("conductivity"),
+      turbidity: getMaxValue("turbidity"),
+      tempAmb: getMaxValue("tempAmb"),
     };
   }, [filteredData]);
-
-  const fixTimezone = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
-  };
 
   return (
     <Card>
@@ -93,6 +104,12 @@ export function Chart({ chartData }: { chartData: ChartData[] }) {
               ? "3 meses"
               : timeRange === "30d"
               ? "30 días"
+              : timeRange === "1d"
+              ? "1 día"
+              : timeRange === "all"
+              ? "todos los datos"
+              : timeRange === "365d"
+              ? "1 año"
               : "7 días"}
           </CardDescription>
         </div>
@@ -101,9 +118,15 @@ export function Chart({ chartData }: { chartData: ChartData[] }) {
             className="mt-3 w-[160px] rounded-lg sm:mt-0 sm:ml-auto"
             aria-label="Select time range"
           >
-            <SelectValue placeholder="Últimos 3 meses" />
+            <SelectValue placeholder="Hoy" />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
+            <SelectItem value="all" className="rounded-lg">
+              Todos los datos
+            </SelectItem>
+            <SelectItem value="365d" className="rounded-lg">
+              Último año
+            </SelectItem>
             <SelectItem value="90d" className="rounded-lg">
               Últimos 3 meses
             </SelectItem>
@@ -112,6 +135,9 @@ export function Chart({ chartData }: { chartData: ChartData[] }) {
             </SelectItem>
             <SelectItem value="7d" className="rounded-lg">
               Últimos 7 días
+            </SelectItem>
+            <SelectItem value="1d" className="rounded-lg">
+              Hoy
             </SelectItem>
           </SelectContent>
         </Select>
@@ -175,8 +201,7 @@ export function Chart({ chartData }: { chartData: ChartData[] }) {
               tickMargin={8}
               minTickGap={32}
               tickFormatter={(value) => {
-                const date = fixTimezone(value);
-                return date.toLocaleDateString("es-US", {
+                return new Date(value).toLocaleDateString("es-BO", {
                   month: "short",
                   day: "numeric",
                 });
@@ -193,11 +218,11 @@ export function Chart({ chartData }: { chartData: ChartData[] }) {
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    const date = fixTimezone(value);
-                    return date.toLocaleDateString("es-US", {
+                    return new Date(value).toLocaleDateString("es-BO", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
+                      hour: "numeric",
                     });
                   }}
                   indicator="dot"
