@@ -38,6 +38,16 @@ const chartConfig = {
     color: "hsl(var(--chart-2))",
     unit: "µS/cm",
   },
+  turbidity: {
+    label: "Turb",
+    color: "blue",
+    unit: "NTU",
+  },
+  temp_amb: {
+    label: "T° Amb",
+    color: "orange",
+    unit: "°C",
+  },
 } satisfies ChartConfig;
 
 async function fetchSensorData(): Promise<ChartData[]> {
@@ -48,7 +58,29 @@ async function fetchSensorData(): Promise<ChartData[]> {
   });
 }
 
+/*async function fetchChartData(punto: string): Promise<ChartData[]> {
+  try {
+    const res = await fetch(
+      `http://localhost:1880/get-day-data?Punto_de_Muestreo=${encodeURIComponent(
+        punto
+      )}`,
+      { cache: "no-store" }
+    );
+
+    if (!res.ok) {
+      throw new Error("Error al obtener datos desde Node-RED");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Error al hacer fetch de los datos:", error);
+    return [];
+  }
+}*/
+
 export function OverviewChart({ point }: { point: MapPoint }) {
+  //const chartData = await fetchChartData(point);
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -115,6 +147,20 @@ export function OverviewChart({ point }: { point: MapPoint }) {
                 strokeWidth={2}
                 dot={false}
               />
+              <Line
+                dataKey="turbidity"
+                type="monotone"
+                stroke="var(--color-turbidity)"
+                strokeWidth={2}
+                dot={false}
+              />
+              <Line
+                dataKey="temp_amb"
+                type="monotone"
+                stroke="var(--color-temp_amb)"
+                strokeWidth={2}
+                dot={false}
+              />
               <ChartLegend content={<ChartLegendContent />} />
             </LineChart>
           </ChartContainer>
@@ -129,7 +175,7 @@ export function OverviewChart({ point }: { point: MapPoint }) {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Datos obtenidos de la última semana.
+              Datos obtenidos a partir de las 8:00 am.
             </div>
             <Link
               href={`/${point.title.toLowerCase()}`}

@@ -27,5 +27,5 @@ export interface ChartData {
   temperature: number;
   conductivity: number;
   turbidity?: number;
-  tempAmb?: number;
+  temp_amb?: number;
 }

@@ -44,7 +44,7 @@ const chartConfig = {
     label: "Turbidez",
     color: "blue",
   },
-  tempAmb: {
+  temp_amb: {
     label: "T° Amb.",
     color: "orange",
   },
@@ -89,7 +89,7 @@ export function Chart({ chartData }: { chartData: ChartData[] }) {
       temperature: getMaxValue("temperature"),
       conductivity: getMaxValue("conductivity"),
       turbidity: getMaxValue("turbidity"),
-      tempAmb: getMaxValue("tempAmb"),
+      temp_amb: getMaxValue("temp_amb"),
     };
   }, [filteredData]);
 

@@ -1,8 +1,9 @@
-import { Chart } from "@/components/chart";
+import { Chart } from "@/components/charts/chart";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { columns } from "@/components/table/columns";
 import { DataTable } from "@/components/table/data-table";
+import SelectZone from "@/components/select-zone";
 import { ChartData } from "@/lib/types";
 import { sensorData } from "@/lib/data";
 import { Suspense } from "react";
@@ -42,17 +43,20 @@ async function SensorDataComponent({ point }: { point: string }) {
     ph: data.ph,
     conductivity: data.conductivity,
     turbidity: data.turbidity,
-    tempAmb: data.temp_amb,
+    temp_amb: data.temp_amb,
   }));
 
   return (
     <div className="m-4 flex flex-col gap-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl sm:text-5xl font-bold text-cyan-900">
-          {decodeURIComponent(point).replace(/\b\w/g, (char) =>
-            char.toUpperCase()
-          )}
-        </h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl sm:text-5xl font-bold text-cyan-900">
+            {decodeURIComponent(point).replace(/\b\w/g, (char) =>
+              char.toUpperCase()
+            )}
+          </h1>
+          <SelectZone />
+        </div>
         <Link href="/">
           <Button className="bg-red-700 hover:bg-red-500 hover:cursor-pointer">
             Salir
